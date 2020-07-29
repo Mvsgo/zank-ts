@@ -1,0 +1,19 @@
+{
+    "sistemas": [
+      {
+        "nome": "Siac",
+        "ativo": true,
+        "id": 1
+      },
+      {
+        "nome": "Siad",
+        "ativo": true,
+        "id": 2
+      },
+      {
+        "nome": "Confat",
+        "ativo": true,
+        "id": 3
+      }
+    ]
+  }
