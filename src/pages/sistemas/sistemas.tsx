@@ -1,5 +1,7 @@
 import { yupResolver } from '@hookform/resolvers';
-import { Button, FormControlLabel, Paper, Switch, TextField, Typography, useFormControl } from '@material-ui/core';
+import { Button, FormControlLabel, Paper, Switch, TextField, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -14,13 +16,23 @@ const Sistema = () => {
     
     const submitForm = handleSubmit(async (data,event) => {
         event?.preventDefault();
+
         console.log(data);
+
+        axios.post('http://localhost:5630/sistemas', data).then(result => {
+            //props.history.push("/");
+        });
 
         //simulando uma demora na resposta do backend
         await new Promise(resolve => setTimeout(resolve,500));
 
         reset({...helper.defaultValues});
-        alert('Sistema inserido com sucesso!');
+        // alert('Sistema inserido com sucesso!');
+        
+        // <Alert variant="filled" severity="success">
+        // This is a success alert — check it out!
+        // </Alert>;
+
 
     });
 
