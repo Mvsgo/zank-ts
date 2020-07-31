@@ -16,7 +16,7 @@ const Sistema = () => {
     
     const submitForm = handleSubmit(async (data,event) => {
         event?.preventDefault();
-
+        
         console.log(data);
 
         axios.post('http://localhost:5630/sistemas', data).then(result => {
