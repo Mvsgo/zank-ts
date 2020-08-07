@@ -31,6 +31,7 @@ export interface ISistemasFormData{
     nome:string;
     ativo: boolean;
 }
+
 const schema = yup.object().shape<ISistemasFormData>({
     ativo: yup.boolean().required(),
     nome:yup.string()

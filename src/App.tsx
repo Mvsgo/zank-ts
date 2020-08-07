@@ -6,6 +6,7 @@ import { BrowserRouter, NavLink, Route } from 'react-router-dom';
 
 import Sistema from './pages/sistemas';
 import Lista from './pages/sistemas/lista';
+import Lista2 from './pages/sistemas/lista2';
 
 const useStyles = makeStyles({
   app:{
@@ -25,12 +26,19 @@ function App() {
                         <li className="nav-item active">
                             <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/" exact>Posts</NavLink>
                         </li>
+
                         <li className="nav-item">
                             <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/create">Novo cadastro</NavLink>
                         </li>
+
                         <li className="nav-item">
                             <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/lista">Lista de sistemas</NavLink>
                         </li>
+
+                        <li className="nav-item">
+                            <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/lista2">Lista de sistemas 2</NavLink>
+                        </li>
+
                     </ul>
                 </div>
             </nav>
@@ -38,6 +46,7 @@ function App() {
                 <br />
                 <Route path="/create" exact component={Sistema}></Route>
                 <Route path="/lista" exact component={Lista}></Route>
+                <Route path="/lista2" exact component={Lista2}></Route>
             </div>
         </BrowserRouter>
       {/* <Sistema /> */}
