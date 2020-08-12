@@ -5,9 +5,9 @@ import { useConfirm } from 'material-ui-confirm';
 import React, { SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { FiMoreVertical } from 'react-icons/fi';
+import { FcCheckmark } from 'react-icons/fc';
 
-import CustomMenu from '../utils/custon-menu';
+import CustomMenu from '../utils/custom-menu';
 
 interface Sistema {
   nome: string;
@@ -69,29 +69,23 @@ const Lista2 = () => {
     //console.log('clicked row = ', id);
   };
 
-  const handleClick = (event: any) => {
-    console.log('clicked ---------------');
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
+  const handleItemMenu = (caption: string, id: number) => {
+    console.log('clicked item menu > ' + caption + ':' + id);
   };
 
   const columns = [
     {
       name: 'Menu',
-      //cell: (row: Sistema) => <IconButton color="primary" onClick={() => handleButtonClick(row.id)}><FiMoreVertical /></IconButton>,
-      cell: () => <CustomMenu items = { {caption:'Deletar',funcao:'nada'},{caption:'Editar',funcao:'ndada'}[] } />,
+      cell: (row: Sistema) => <CustomMenu idKey={row.id} onClickItemMenu={handleItemMenu} items={['Editar', 'Deletar']} />,
       button: true,
     },
     { name: 'id', selector: 'id', sortable: true },
     { name: 'Nome', selector: 'nome', sortable: true },
-    { name: 'Ativo', selector: 'ativo', sortable: true },
+    { name: 'Ativo', cell: (row: Sistema) => (row.ativo ? <FcCheckmark /> : null), button: false },
   ];
-  //cell: (row) => <div style={{ fontWeight: bold }}>{row.nome}</div>,
 
   //-----------------------------------------------------------------------------------------------------------------------
+
   return (
     <div className={classes.container}>
       <Paper className={classes.paper}>

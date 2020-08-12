@@ -1,3 +1,4 @@
+import { ListItemSecondaryAction } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -5,6 +6,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
+import { FiMoreVertical } from 'react-icons/fi';
 
 interface Sistema {
   nome: string;
@@ -12,13 +14,15 @@ interface Sistema {
   id: number;
 }
 
-interface ItemsMenu {
-    caption: string;
-    funcao: string;
+export interface ItemsMenu {
+  idKey: number;
+  onClickItemMenu: (caption: string, id: number) => void;
+  items: string[];
 }
+//items: Array<{ caption: string }>;
+const CustomMenu: React.FC<ItemsMenu> = (props) => {
+  const { idKey, onClickItemMenu, items } = props;
 
-// eslint-disable-next-line react/prop-types
-const CustomMenu = (items:[{}]) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event: any) => {
@@ -32,7 +36,7 @@ const CustomMenu = (items:[{}]) => {
   return (
     <div>
       <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
-        ?
+        <FiMoreVertical />
       </IconButton>
       <Menu
         id="menu"
@@ -50,15 +54,16 @@ const CustomMenu = (items:[{}]) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>Item One</MenuItem>
-
-        <MenuItem>Item Two</MenuItem>
-
-        <Divider />
-
-        <MenuItem>
-          <Typography variant="inherit">Delete</Typography>
-        </MenuItem>
+        {items?.map((caption) => (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              onClickItemMenu(caption, idKey);
+            }}
+          >
+            <Typography variant="inherit">{caption}</Typography>
+          </MenuItem>
+        ))}
       </Menu>
     </div>
   );
