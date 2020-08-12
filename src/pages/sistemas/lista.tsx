@@ -53,24 +53,21 @@ const Lista = () => {
   const classes = useStyles();
   const [data, setData] = useState<Sistema[]>();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  
+
   const rect = anchorEl?.getBoundingClientRect();
   const style: React.CSSProperties = {
     top: rect ? `${rect.top + 10}px` : 'unset',
     left: rect ? `${rect.left}px` : 'unset',
   };
 
-  const deleteFunc = useCallback((event: React.BaseSyntheticEvent<HTMLDivElement>)=>{
-
+  const deleteFunc = useCallback((event: React.BaseSyntheticEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log('target', event.target.closest('div'))
-    setAnchorEl( event.currentTarget );
-    
-  },[]);
+    console.log('target', event.target.closest('div'));
+    setAnchorEl(event.currentTarget);
+  }, []);
 
   useEffect(() => {
     axios.get('http://localhost:5630/sistemas').then((result) => {
-      //simulando uma demora na resposta do backend
       setData(result.data);
       console.log(result.data);
       //await new Promise(resolve => setTimeout(resolve,500));
@@ -79,27 +76,26 @@ const Lista = () => {
 
   if (!data) return <div>loading...</div>;
 
-
   // function deleteFunc(event: any, cell: any){
   //   const data = cell.getRow().getData();
 
   //   console.log(data.id+ '  '+ data.nome);
 
-    // confirm({
-    //   title: 'Confirmação', 
-    //   confirmationText: 'Confirmar',
-    //   cancellationText: 'Cancelar',
-    //   description: 'Confirmar excluir o sistema: '+data.nome })
-    //   .then( async () => {
-    //     await axios.delete(`http://localhost:5630/sistemas/${data.id}`)
-    //     cell.getRow().delete()
-    //   });
+  // confirm({
+  //   title: 'Confirmação',
+  //   confirmationText: 'Confirmar',
+  //   cancellationText: 'Cancelar',
+  //   description: 'Confirmar excluir o sistema: '+data.nome })
+  //   .then( async () => {
+  //     await axios.delete(`http://localhost:5630/sistemas/${data.id}`)
+  //     cell.getRow().delete()
+  //   });
 
-      //.catch(() => { /* */ });
+  //.catch(() => { /* */ });
 
-      //SetStateAction<null>
-      // const st =  document.getElementById("icone");
-      // st?.closest()
+  //SetStateAction<null>
+  // const st =  document.getElementById("icone");
+  // st?.closest()
   //     console.log('target', event.target.closest('div'))
   //     setAnchorEl( event.target.closest('div') );
 
@@ -107,12 +103,12 @@ const Lista = () => {
 
   const columns = [
     {
-        title: 'Exclir',
-        formatter: reactFormatter(<FaTrash id="icone" name="icone" aria-controls="simple-menu" aria-haspopup="true"/>), 
-        headerSort: false,
-        hozAlign:"center",
-        cellClick: deleteFunc,
-        width: 50,
+      title: 'Exclir',
+      formatter: reactFormatter(<FaTrash id="icone" name="icone" aria-controls="simple-menu" aria-haspopup="true" />),
+      headerSort: false,
+      hozAlign: 'center',
+      cellClick: deleteFunc,
+      width: 50,
     },
     { title: 'id', field: 'id', width: 100 },
     { title: 'Nome', field: 'nome', width: 200 },
@@ -122,14 +118,14 @@ const Lista = () => {
   const options = {
     history: true,
     layoutColumnsOnNewData: true,
-    virtualDom: false
+    virtualDom: false,
   };
-  
+
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
 
-  const handleClick = (event:any) => {
+  const handleClick = (event: any) => {
     setAnchorEl(event?.currentTarget);
     console.log(event?.currentTarget);
   };
@@ -137,67 +133,44 @@ const Lista = () => {
   //-----------------------------------------------------------------------------------------------------------------------
   return (
     <div className={classes.container}>
-      <Paper className={classes.paper} >
+      <Paper className={classes.paper}>
         <h2>Lista de sistemas</h2>
 
         <Divider />
-        <ReactTabulator 
-        data={data}
-        options={options}
-        columns={columns} 
-        tooltips={true} 
-        layout={'fitData'} /> 
+        <ReactTabulator data={data} options={options} columns={columns} tooltips={true} layout={'fitData'} />
 
+        <Button id="bbb1" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+          Open Menu
+        </Button>
 
-      <Button id="bbb1" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-        Open Menu
-      </Button>
-
-      
-      <Menu
-        style={style}
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-      >
-        <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
-        <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
-        <MenuItem onClick={handleCloseMenu}>Logout</MenuItem>
-      </Menu>
-      
+        <Menu style={style} id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+          <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
+          <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
+          <MenuItem onClick={handleCloseMenu}>Logout</MenuItem>
+        </Menu>
       </Paper>
-
     </div>
-    
   );
-
 };
 
 export default Lista;
 
-
-
-
-
-
-  // <div className={classes.container}>
-  //     <Paper className={classes.paper}>
-  //         <h2>Lista de sistemas</h2>
-  //         <Divider />
-  //         {posts?.map(s =>
-  //             <>
-  //             <div key={s.id} className={classes.coluna}>
-  //                 <div>{s.id}</div>
-  //                 <div>{s.nome}</div>
-  //                 <div>Ativo: {s.ativo ? 'sim' : 'não' }</div>
-  //                 <IconButton>
-  //                 <FaTrash color="#000000" />
-  //                 </IconButton>
-  //             </div>
-  //             <Divider />
-  //             </>
-  //         )}
-  //     </Paper>
-  // </div>
+// <div className={classes.container}>
+//     <Paper className={classes.paper}>
+//         <h2>Lista de sistemas</h2>
+//         <Divider />
+//         {posts?.map(s =>
+//             <>
+//             <div key={s.id} className={classes.coluna}>
+//                 <div>{s.id}</div>
+//                 <div>{s.nome}</div>
+//                 <div>Ativo: {s.ativo ? 'sim' : 'não' }</div>
+//                 <IconButton>
+//                 <FaTrash color="#000000" />
+//                 </IconButton>
+//             </div>
+//             <Divider />
+//             </>
+//         )}
+//     </Paper>
+// </div>

@@ -19,6 +19,7 @@ export interface ItemsMenu {
   onClickItemMenu: (caption: string, id: number) => void;
   items: string[];
 }
+
 //items: Array<{ caption: string }>;
 const CustomMenu: React.FC<ItemsMenu> = (props) => {
   const { idKey, onClickItemMenu, items } = props;
