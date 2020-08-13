@@ -15,14 +15,14 @@ interface Sistema {
 }
 
 export interface ItemsMenu {
-  idKey: number;
-  onClickItemMenu: (caption: string, id: number) => void;
+  row: Sistema;
+  onClickItemMenu: (caption: string, row: Sistema) => void;
   items: string[];
 }
 
 //items: Array<{ caption: string }>;
 const CustomMenu: React.FC<ItemsMenu> = (props) => {
-  const { idKey, onClickItemMenu, items } = props;
+  const { row, onClickItemMenu, items } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -59,7 +59,7 @@ const CustomMenu: React.FC<ItemsMenu> = (props) => {
           <MenuItem
             onClick={() => {
               handleClose();
-              onClickItemMenu(caption, idKey);
+              onClickItemMenu(caption, row);
             }}
           >
             <Typography variant="inherit">{caption}</Typography>

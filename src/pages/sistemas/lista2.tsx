@@ -63,20 +63,48 @@ const Lista2 = () => {
 
   if (!data) return <div>loading...</div>;
 
+  const state: any = { selectedRows: [], toggleCleared: false, data: data };
+
   const handleButtonClick = (event: any, id: any) => {
     setAnchorEl(event.currentTarget);
     //console.log('clicked row >');
     //console.log('clicked row = ', id);
   };
 
-  const handleItemMenu = (caption: string, id: number) => {
-    console.log('clicked item menu > ' + caption + ':' + id);
-  };
+  function deleteFunc(idKey: number) {
+    // confirm({
+    //   title: 'Confirmação',
+    //   confirmationText: 'Confirmar',
+    //   cancellationText: 'Cancelar',
+    //   description: 'Confirmar excluir o sistema: ' + data.nome,
+    // })
+    //   .then(async () => {
+    //     await axios.delete(`http://localhost:5630/sistemas/${idKey}`);
+    //     cell.getRow().delete();
+    //   })
+    //   .catch(() => {
+    //     /* */
+    //   });
+
+    const handleItemMenu = (caption: string, row: Sistema) => {
+      console.log('clicked item menu > ' + caption + ':' + row.id);
+
+      if (window.confirm(`Are you sure you want to delete:\r ${row.nome}?`)) {
+        const { data } = state;
+        const index = data.findIndex((r: Sistema) => r === row);
+
+        setState((state) => ({
+          toggleCleared: !state.toggleCleared,
+          data: [...state.data.slice(0, index), ...state.data.slice(index + 1)],
+        }));
+      }
+    };
+  }
 
   const columns = [
     {
       name: 'Menu',
-      cell: (row: Sistema) => <CustomMenu idKey={row.id} onClickItemMenu={handleItemMenu} items={['Editar', 'Deletar']} />,
+      cell: (row: Sistema) => <CustomMenu row={row} onClickItemMenu={handleItemMenu} items={['Editar', 'Deletar']} />,
       button: true,
     },
     { name: 'id', selector: 'id', sortable: true },
