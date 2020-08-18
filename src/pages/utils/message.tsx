@@ -11,35 +11,40 @@ import React from 'react';
 const ConfirmDialog = (props: any) => {
   const { title, children, open, setOpen, onConfirm } = props;
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));  
-  
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <div>
-    <Dialog
-      open={open}
-      onClose={() => setOpen(false)}
-      fullScreen={fullScreen}
-      aria-labelledby="responsive-dialog-title"      
-    >
-      <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          {children}
-        </DialogContentText>
-      </DialogContent>
+      <Dialog open={open} onClose={() => setOpen(false)} fullScreen={fullScreen} aria-labelledby="responsive-dialog-title">
+        <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{children}</DialogContentText>
+        </DialogContent>
 
-      <DialogActions>
-
-         <Button autoFocus onClick={() => {setOpen(false); onConfirm();}} color="primary">
+        <DialogActions>
+          <Button
+            autoFocus
+            onClick={() => {
+              setOpen(false);
+              onConfirm();
+            }}
+            color="primary"
+          >
             Não
           </Button>
 
-          <Button onClick={() => {setOpen(true); onConfirm();}} color="primary" autoFocus>
+          <Button
+            onClick={() => {
+              setOpen(true);
+              onConfirm();
+            }}
+            color="primary"
+            autoFocus
+          >
             Sim
           </Button>
-          
-      </DialogActions>
-    </Dialog>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

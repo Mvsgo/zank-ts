@@ -11,7 +11,7 @@ ReactDOM.render(
   <React.StrictMode>
     <CssBaseline />
     <ConfirmProvider>
-    <App />
+      <App />
     </ConfirmProvider>
   </React.StrictMode>,
   document.getElementById('root')

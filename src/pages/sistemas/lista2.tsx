@@ -1,14 +1,14 @@
-import { Button, IconButton, makeStyles, Menu, MenuItem, Paper } from '@material-ui/core';
+import { makeStyles, Paper } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
-import { useConfirm } from 'material-ui-confirm';
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FcCheckmark } from 'react-icons/fc';
 
 import CustomMenu from '../utils/custom-menu';
 
+//import { useConfirm } from 'material-ui-confirm';
 interface Sistema {
   nome: string;
   ativo: boolean;
@@ -47,10 +47,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Lista2 = () => {
-  const confirm = useConfirm();
+  //const confirm = useConfirm();
   const classes = useStyles();
   const [data, setData] = useState<Sistema[]>();
-  const [anchorEl, setAnchorEl] = useState(null);
+  //const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     axios.get('http://localhost:5630/sistemas').then((result) => {
@@ -63,43 +63,43 @@ const Lista2 = () => {
 
   if (!data) return <div>loading...</div>;
 
-  const state: any = { selectedRows: [], toggleCleared: false, data: data };
+  //const state: any = { selectedRows: [], toggleCleared: false, data: data };
 
   const handleButtonClick = (event: any, id: any) => {
-    setAnchorEl(event.currentTarget);
+    //setAnchorEl(event.currentTarget);
     //console.log('clicked row >');
     //console.log('clicked row = ', id);
   };
 
-  function deleteFunc(idKey: number) {
-    // confirm({
-    //   title: 'Confirmação',
-    //   confirmationText: 'Confirmar',
-    //   cancellationText: 'Cancelar',
-    //   description: 'Confirmar excluir o sistema: ' + data.nome,
-    // })
-    //   .then(async () => {
-    //     await axios.delete(`http://localhost:5630/sistemas/${idKey}`);
-    //     cell.getRow().delete();
-    //   })
-    //   .catch(() => {
-    //     /* */
-    //   });
+  //function deleteFunc(idKey: number) {
+  // confirm({
+  //   title: 'Confirmação',
+  //   confirmationText: 'Confirmar',
+  //   cancellationText: 'Cancelar',
+  //   description: 'Confirmar excluir o sistema: ' + data.nome,
+  // })
+  //   .then(async () => {
+  //     await axios.delete(`http://localhost:5630/sistemas/${idKey}`);
+  //     cell.getRow().delete();
+  //   })
+  //   .catch(() => {
+  //     /* */
+  //   });
 
-    const handleItemMenu = (caption: string, row: Sistema) => {
-      console.log('clicked item menu > ' + caption + ':' + row.id);
+  const handleItemMenu = (caption: string, row: Sistema) => {
+    console.log('clicked item menu > ' + caption + ':' + row.id);
 
-      if (window.confirm(`Are you sure you want to delete:\r ${row.nome}?`)) {
-        const { data } = state;
-        const index = data.findIndex((r: Sistema) => r === row);
+    // if (window.confirm(`Are you sure you want to delete:\r ${row.nome}?`)) {
+    //   const { data } = state;
+    //   const index = data.findIndex((r: Sistema) => r === row);
 
-        setState((state) => ({
-          toggleCleared: !state.toggleCleared,
-          data: [...state.data.slice(0, index), ...state.data.slice(index + 1)],
-        }));
-      }
-    };
-  }
+    //   // setState((state) => ({
+    //   //   toggleCleared: !state.toggleCleared,
+    //   //   data: [...state.data.slice(0, index), ...state.data.slice(index + 1)],
+    //   // }));
+    // }
+  };
+  ///}
 
   const columns = [
     {

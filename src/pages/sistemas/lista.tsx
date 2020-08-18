@@ -1,16 +1,18 @@
 import 'react-tabulator/lib/css/tabulator.min.css';
 import 'react-tabulator/lib/styles.css';
 
-import { Button, makeStyles, Menu, MenuItem, Paper } from '@material-ui/core';
+import { makeStyles, Paper } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
 import { useConfirm } from 'material-ui-confirm';
-import React, { SetStateAction, useCallback } from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
-import { FaTrash } from 'react-icons/fa';
 import { reactFormatter, ReactTabulator } from 'react-tabulator';
 
-//import 'material-icons';
+import CustomMenu from '../utils/custom-menu';
+
+//import ResponsiveDialog from '../utils/dialog';
+
 interface Sistema {
   nome: string;
   ativo: boolean;
@@ -48,23 +50,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Lista = () => {
+const Lista = (props: any) => {
   const confirm = useConfirm();
   const classes = useStyles();
   const [data, setData] = useState<Sistema[]>();
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  //const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const imEditar = 'Editar';
+  const imDeletar = 'Deletar';
 
-  const rect = anchorEl?.getBoundingClientRect();
-  const style: React.CSSProperties = {
-    top: rect ? `${rect.top + 10}px` : 'unset',
-    left: rect ? `${rect.left}px` : 'unset',
-  };
+  // const rect = anchorEl?.getBoundingClientRect();
+  // const style: React.CSSProperties = {
+  //   top: rect ? `${rect.top + 10}px` : 'unset',
+  //   left: rect ? `${rect.left}px` : 'unset',
+  // };
 
-  const deleteFunc = useCallback((event: React.BaseSyntheticEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    console.log('target', event.target.closest('div'));
-    setAnchorEl(event.currentTarget);
-  }, []);
+  // const deleteFunc = useCallback((event: React.BaseSyntheticEvent<HTMLDivElement>) => {
+  //   event.preventDefault();
+  //   console.log('target', event.target.closest('div'));
+  //   setAnchorEl(event.currentTarget);
+  // }, []);
 
   useEffect(() => {
     axios.get('http://localhost:5630/sistemas').then((result) => {
@@ -76,58 +80,46 @@ const Lista = () => {
 
   if (!data) return <div>loading...</div>;
 
-  // function deleteFunc(event: any, cell: any){
-  //   const data = cell.getRow().getData();
+  const handleItemMenu = (caption: string, row: any) => {
+    //console.log('clicked item menu > ' + caption + ':' + row.data.nome);
 
-  //   console.log(data.id+ '  '+ data.nome);
+    if (caption === imDeletar) {
+      confirm({
+        title: 'Confirmação',
+        confirmationText: 'Confirmar',
+        cancellationText: 'Cancelar',
+        description: 'Confirmar excluir o sistema: ' + row.data.nome,
+      }).then(async () => {
+        await axios.delete(`http://localhost:5630/sistemas/${row.data.id}`);
+        row.delete();
+      });
+    } else if (caption === imEditar) {
+      props.history.push('/sistema/' + row.data.id);
+    }
+  };
 
-  // confirm({
-  //   title: 'Confirmação',
-  //   confirmationText: 'Confirmar',
-  //   cancellationText: 'Cancelar',
-  //   description: 'Confirmar excluir o sistema: '+data.nome })
-  //   .then( async () => {
-  //     await axios.delete(`http://localhost:5630/sistemas/${data.id}`)
-  //     cell.getRow().delete()
-  //   });
-
-  //.catch(() => { /* */ });
-
-  //SetStateAction<null>
-  // const st =  document.getElementById("icone");
-  // st?.closest()
-  //     console.log('target', event.target.closest('div'))
-  //     setAnchorEl( event.target.closest('div') );
-
-  // };
+  function SimpleButton(props: any) {
+    const rowData = props.cell._cell.row;
+    //return <ResponsiveDialog />;
+    return <CustomMenu row={rowData} onClickItemMenu={handleItemMenu} items={[imEditar, imDeletar]} />;
+  }
 
   const columns = [
+    { formatter: 'rownum', hozAlign: 'center', width: 40 },
     {
-      title: 'Exclir',
-      formatter: reactFormatter(<FaTrash id="icone" name="icone" aria-controls="simple-menu" aria-haspopup="true" />),
-      headerSort: false,
+      formatter: reactFormatter(<SimpleButton />),
+      width: 40,
       hozAlign: 'center',
-      cellClick: deleteFunc,
-      width: 50,
     },
     { title: 'id', field: 'id', width: 100 },
     { title: 'Nome', field: 'nome', width: 200 },
-    { title: 'Ativo', field: 'ativo', width: 80 },
+    { title: 'Ativo', field: 'ativo', width: 80, hozAlign: 'center', formatter: 'tickCross' },
   ];
 
   const options = {
     history: true,
     layoutColumnsOnNewData: true,
     virtualDom: false,
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const handleClick = (event: any) => {
-    setAnchorEl(event?.currentTarget);
-    console.log(event?.currentTarget);
   };
 
   //-----------------------------------------------------------------------------------------------------------------------
@@ -138,16 +130,6 @@ const Lista = () => {
 
         <Divider />
         <ReactTabulator data={data} options={options} columns={columns} tooltips={true} layout={'fitData'} />
-
-        <Button id="bbb1" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-          Open Menu
-        </Button>
-
-        <Menu style={style} id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-          <MenuItem onClick={handleCloseMenu}>Profile</MenuItem>
-          <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
-          <MenuItem onClick={handleCloseMenu}>Logout</MenuItem>
-        </Menu>
       </Paper>
     </div>
   );

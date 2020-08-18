@@ -1,7 +1,4 @@
-import { ListItemSecondaryAction } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
@@ -16,7 +13,7 @@ interface Sistema {
 
 export interface ItemsMenu {
   row: Sistema;
-  onClickItemMenu: (caption: string, row: Sistema) => void;
+  onClickItemMenu: (caption: string, row: any) => void;
   items: string[];
 }
 
@@ -36,7 +33,7 @@ const CustomMenu: React.FC<ItemsMenu> = (props) => {
 
   return (
     <div>
-      <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
+      <IconButton size="small" aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
         <FiMoreVertical />
       </IconButton>
       <Menu
@@ -59,7 +56,7 @@ const CustomMenu: React.FC<ItemsMenu> = (props) => {
           <MenuItem
             onClick={() => {
               handleClose();
-              onClickItemMenu(caption, row);
+              Boolean(onClickItemMenu(caption, row));
             }}
           >
             <Typography variant="inherit">{caption}</Typography>
