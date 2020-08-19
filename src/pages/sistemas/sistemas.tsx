@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers';
 import { Button, FormControlLabel, Paper, Switch, TextField, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import api from 'src/api';
@@ -9,7 +9,7 @@ import helper, { ISistemasFormData } from './helper';
 
 const Sistema = (props: any) => {
   const { id } = useParams();
-  const [idKey, setIdKey] = useState<number>(0);
+  //const [idKey, setIdKey] = useState<number>(0);
   //const [data, setData] = useState<ISistemasFormData>();
 
   const classes = helper.useStyles();
@@ -19,38 +19,39 @@ const Sistema = (props: any) => {
     resolver: yupResolver(helper.schema),
   });
 
-  console.log('editar id = ', id);
+  console.log('inicio id = ', id);
 
-  if (id > 0) {
-    useEffect(() => {
+  useEffect(() => {
+    if (id > 0) {
       api()
         .get(`/sistemas/${id}`)
         .then((result) => {
           console.log(result.data);
+          //await reset(result.data);
+          //await setIdKey(result.data.id);
+          //setData(result.data);
           reset(result.data);
         });
-    }, [id]);
-    setIdKey(id);
-    //reset(result.data);
-  }
+    }
+  }, [id]);
 
   const submitForm = handleSubmit(async (data, event) => {
     event?.preventDefault();
 
-    console.log('submitForm = ', data);
+    //console.log('submitForm = ', data);
 
-    if (idKey === 0) {
+    if (id > 0) {
+      console.log('edit id = ', id);
       api()
-        .post('/sistemas', data)
+        .put(`/sistemas/${id}`, data)
         .then((result) => {
           props.history.push('/lista');
         });
     } else {
+      console.log('novo id = ', id);
       api()
-        .put(`/sistemas/${idKey}`, data)
-        .then((result) => {
-          props.history.push('/lista');
-        });
+        .post('/sistemas', data)
+        .then((result) => {});
     }
 
     //simulando uma demora na resposta do backend

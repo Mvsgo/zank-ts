@@ -3,12 +3,14 @@ import 'react-tabulator/lib/styles.css';
 
 import { makeStyles, Paper } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
-import axios from 'axios';
 import { useConfirm } from 'material-ui-confirm';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { reactFormatter, ReactTabulator } from 'react-tabulator';
+import api from 'src/api';
 import CustomMenu from 'src/utils/custom-menu';
+
+import Sistema from './sistemas';
 
 interface Sistema {
   nome: string;
@@ -68,11 +70,13 @@ const Lista = (props: any) => {
   // }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:5630/sistemas').then((result) => {
-      setData(result.data);
-      console.log(result.data);
-      //await new Promise(resolve => setTimeout(resolve,500));
-    });
+    api()
+      .get('/sistemas')
+      .then((result) => {
+        setData(result.data);
+        console.log(result.data);
+        //await new Promise(resolve => setTimeout(resolve,500));
+      });
   }, []);
 
   if (!data) return <div>loading...</div>;
@@ -87,11 +91,11 @@ const Lista = (props: any) => {
         cancellationText: 'Cancelar',
         description: 'Confirmar excluir o sistema: ' + row.data.nome,
       }).then(async () => {
-        await axios.delete(`http://localhost:5630/sistemas/${row.data.id}`);
+        await api().delete(`/sistemas/${row.data.id}`);
         row.delete();
       });
     } else if (caption === imEditar) {
-      props.history.push('/sistema/' + row.data.id);
+      props.history.push(`/sistema/${row.data.id}`);
     }
   };
 
