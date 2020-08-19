@@ -8,10 +8,7 @@ import { useConfirm } from 'material-ui-confirm';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { reactFormatter, ReactTabulator } from 'react-tabulator';
-
-import CustomMenu from '../utils/custom-menu';
-
-//import ResponsiveDialog from '../utils/dialog';
+import CustomMenu from 'src/utils/custom-menu';
 
 interface Sistema {
   nome: string;
@@ -105,15 +102,11 @@ const Lista = (props: any) => {
   }
 
   const columns = [
-    { formatter: 'rownum', hozAlign: 'center', width: 40 },
-    {
-      formatter: reactFormatter(<SimpleButton />),
-      width: 40,
-      hozAlign: 'center',
-    },
-    { title: 'id', field: 'id', width: 100 },
-    { title: 'Nome', field: 'nome', width: 200 },
-    { title: 'Ativo', field: 'ativo', width: 80, hozAlign: 'center', formatter: 'tickCross' },
+    { formatter: 'rownum', hozAlign: 'center', headerSort: false },
+    { formatter: reactFormatter(<SimpleButton />), hozAlign: 'center', headerSort: false },
+    { title: 'id', field: 'id', width: 50 },
+    { title: 'Nome', field: 'nome', width: 300 },
+    { title: 'Ativo', field: 'ativo', width: 50, hozAlign: 'center', formatter: 'tickCross', headerSort: false },
   ];
 
   const options = {
@@ -123,13 +116,15 @@ const Lista = (props: any) => {
   };
 
   //-----------------------------------------------------------------------------------------------------------------------
+
   return (
     <div className={classes.container}>
       <Paper className={classes.paper}>
         <h2>Lista de sistemas</h2>
 
         <Divider />
-        <ReactTabulator data={data} options={options} columns={columns} tooltips={true} layout={'fitData'} />
+
+        <ReactTabulator data={data} options={options} columns={columns} tooltips={false} layout={'fitData'} />
       </Paper>
     </div>
   );

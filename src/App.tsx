@@ -1,64 +1,55 @@
 import './App.css';
 
+import { AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
-import { BrowserRouter, NavLink, Route } from 'react-router-dom';
+import { TiThMenu } from 'react-icons/ti';
+import { Route, Switch } from 'react-router-dom';
 
 import Sistema from './pages/sistemas';
 import Lista from './pages/sistemas/lista';
 
-//import Lista2 from './pages/sistemas/lista2';
-
-//import { makeStyles } from '@material-ui/core';
-// const useStyles = makeStyles({
-//   app:{
-//     height:'100vh',
-//     width:'100%',
-//   }
-// });
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  main: {
+    flexGrow: 1,
+    padding: theme.spacing(8),
+  },
+}));
 
 function App() {
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-          <NavLink to="/" className="navbar-brand">
-            Posts Manager
-          </NavLink>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item active">
-                <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/" exact>
-                  Posts
-                </NavLink>
-              </li>
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <TiThMenu />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            Zank Web
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
 
-              <li className="nav-item">
-                <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/lista">
-                  Cadastro de sistemas
-                </NavLink>
-              </li>
-
-              {/* <li className="nav-item">
-                <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/lista">
-                  Lista de sistemas
-                </NavLink>
-              </li>
-
-              <li className="nav-item">
-                <NavLink className="nav-link" activeStyle={{ fontWeight: 'bold' }} to="/lista2">
-                  Lista de sistemas 2
-                </NavLink>
-              </li> */}
-            </ul>
+      <main className={classes.main}>
+        <Switch>
+          <div className="container">
+            <Route path="/sistema/:id" exact component={Sistema}></Route>
+            <Route path="/lista" exact component={Lista}></Route>
           </div>
-        </nav>
-        <div className="container">
-          <br />
-          <Route path="/sistema/:id" exact component={Sistema}></Route>
-          <Route path="/lista" exact component={Lista}></Route>
-        </div>
-      </BrowserRouter>
-      {/* <Sistema /> */}
+        </Switch>
+      </main>
     </div>
   );
 }

@@ -2,17 +2,17 @@ import { yupResolver } from '@hookform/resolvers';
 import { Button, FormControlLabel, Paper, Switch, TextField, Typography } from '@material-ui/core';
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import api from 'src/api/api';
 
 import helper, { ISistemasFormData } from './helper';
 
-//import { Alert } from '@material-ui/lab';
 const Sistema = (props: any) => {
   const { id } = useParams();
   const classes = helper.useStyles();
 
-  const { register, handleSubmit, reset, errors, formState, setValue } = useForm<ISistemasFormData>({
+  const { control, handleSubmit, reset, errors, formState, setValue } = useForm<ISistemasFormData>({
     defaultValues: helper.defaultValues,
     resolver: yupResolver(helper.schema),
   });
@@ -21,11 +21,13 @@ const Sistema = (props: any) => {
 
   useEffect(() => {
     if (id >= 0) {
-      axios.get(`http://localhost:5630/sistemas/${id}`).then((result) => {
-        console.log(result.data);
-        setValue('nome', result.data.nome);
-        setValue('ativo', result.data.ativo);
-      });
+      api()
+        .get(`/sistemas/${id}`)
+        .then((result) => {
+          console.log(result.data);
+          setValue('nome', result.data.nome);
+          setValue('ativo', result.data.ativo);
+        });
     }
   }, [id]);
 
@@ -35,13 +37,17 @@ const Sistema = (props: any) => {
     console.log(data);
 
     if (id === 0) {
-      axios.post('http://localhost:5630/sistemas', data).then((result) => {
-        props.history.push('/lista');
-      });
+      api()
+        .post('/sistemas', data)
+        .then((result) => {
+          props.history.push('/lista');
+        });
     } else {
-      axios.put(`http://localhost:5630/sistemas/${id}`, data).then((result) => {
-        props.history.push('/lista');
-      });
+      api()
+        .put(`/sistemas/${id}`, data)
+        .then((result) => {
+          props.history.push('/lista');
+        });
     }
 
     //simulando uma demora na resposta do backend
@@ -62,7 +68,7 @@ const Sistema = (props: any) => {
         <Typography variant="h4">Cadastro de Sistemas</Typography>
 
         <form onSubmit={submitForm} className={classes.form} noValidate autoComplete="off">
-          <TextField
+          {/* <TextField
             label="Informe o nome do Sistema"
             name="nome"
             variant="outlined"
@@ -72,9 +78,32 @@ const Sistema = (props: any) => {
             fullWidth
             required
             autoFocus
-          />
+          /> */}
+          {/* <FormControlLabel label="Sistema Ativo?" control={<Switch name="ativo" inputRef={register} defaultChecked />} /> */}
 
-          <FormControlLabel label="Sistema Ativo?" control={<Switch name="ativo" inputRef={register} defaultChecked />} />
+          <Controller
+            name="nome"
+            control={control}
+            defaultValue=""
+            as={
+              <TextField
+                label="Informe o nome do sistema"
+                variant="outlined"
+                error={!!errors.nome}
+                helperText={errors.nome?.message}
+                fullWidth
+                required
+                autoFocus
+              />
+            }
+          />
+          <Controller
+            name="ativo"
+            control={control}
+            render={({ value, onChange }) => (
+              <FormControlLabel label="Sistema Ativo ?" control={<Switch onChange={(e) => onChange(e.target.checked)} checked={value} />} />
+            )}
+          />
 
           <Button type="submit" className={classes.button} color="primary" variant="contained" fullWidth disabled={formState.isSubmitting}>
             salvar

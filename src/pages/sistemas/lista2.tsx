@@ -6,9 +6,8 @@ import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { FcCheckmark } from 'react-icons/fc';
 
-import CustomMenu from '../utils/custom-menu';
+import CustomMenu from '../../utils/custom-menu';
 
-//import { useConfirm } from 'material-ui-confirm';
 interface Sistema {
   nome: string;
   ativo: boolean;
