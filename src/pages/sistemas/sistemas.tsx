@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers';
 import { Button, FormControlLabel, Paper, Switch, TextField, Typography } from '@material-ui/core';
-import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import api from 'src/api';
@@ -10,33 +9,37 @@ import helper, { ISistemasFormData } from './helper';
 
 const Sistema = (props: any) => {
   const { id } = useParams();
+  const [idKey, setIdKey] = useState<number>(0);
+  //const [data, setData] = useState<ISistemasFormData>();
+
   const classes = helper.useStyles();
 
-  const { control, handleSubmit, reset, errors, formState, setValue } = useForm<ISistemasFormData>({
+  const { control, handleSubmit, reset, errors, formState } = useForm<ISistemasFormData>({
     defaultValues: helper.defaultValues,
     resolver: yupResolver(helper.schema),
   });
 
   console.log('editar id = ', id);
 
-  useEffect(() => {
-    if (id >= 0) {
+  if (id > 0) {
+    useEffect(() => {
       api()
         .get(`/sistemas/${id}`)
         .then((result) => {
           console.log(result.data);
-          setValue('nome', result.data.nome);
-          setValue('ativo', result.data.ativo);
+          reset(result.data);
         });
-    }
-  }, [id]);
+    }, [id]);
+    setIdKey(id);
+    //reset(result.data);
+  }
 
   const submitForm = handleSubmit(async (data, event) => {
     event?.preventDefault();
 
-    console.log(data);
+    console.log('submitForm = ', data);
 
-    if (id === 0) {
+    if (idKey === 0) {
       api()
         .post('/sistemas', data)
         .then((result) => {
@@ -44,7 +47,7 @@ const Sistema = (props: any) => {
         });
     } else {
       api()
-        .put(`/sistemas/${id}`, data)
+        .put(`/sistemas/${idKey}`, data)
         .then((result) => {
           props.history.push('/lista');
         });

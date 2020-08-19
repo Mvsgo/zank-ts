@@ -4,7 +4,7 @@ import { AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/co
 import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import { TiThMenu } from 'react-icons/ti';
-import { Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 
 import Sistema from './pages/sistemas';
 import Lista from './pages/sistemas/lista';
@@ -38,7 +38,9 @@ function App() {
           <Typography variant="h6" className={classes.title}>
             Zank Web
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" component={Link} to="/lista">
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
 
