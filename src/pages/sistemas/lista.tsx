@@ -1,7 +1,8 @@
 import 'react-tabulator/lib/css/tabulator.min.css';
 import 'react-tabulator/lib/styles.css';
 
-import { makeStyles, Paper } from '@material-ui/core';
+import { Button, Paper, Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import { useConfirm } from 'material-ui-confirm';
 import React from 'react';
@@ -18,44 +19,44 @@ interface Sistema {
   id: number;
 }
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    height: '100%',
-    width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  paper: {
-    display: 'flex',
-    maxWidth: 800,
-    flexDirection: 'column',
-    padding: '10px',
-  },
-  coluna: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'space-around',
-    '& div': {
-      margin: '5px',
-      fontSize: '27px',
-      fontWeight: 40,
-    },
-  },
-  button: {
-    flex: 1,
-    margin: '16px 0',
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   container: {
+//     display: 'flex',
+//     height: '100%',
+//     width: '100%',
+//     justifyContent: 'flex-start',
+//     alignItems: 'center',
+//     flexDirection: 'column',
+//   },
+//   paper: {
+//     display: 'flex',
+//     maxWidth: 800,
+//     flexDirection: 'column',
+//     padding: '10px',
+//   },
+//   coluna: {
+//     display: 'flex',
+//     justifyContent: 'flex-start',
+//     alignItems: 'space-around',
+//     '& div': {
+//       margin: '5px',
+//       fontSize: '27px',
+//       fontWeight: 40,
+//     },
+//   },
+//   button: {
+//     flex: 1,
+//     margin: '16px 0',
+//   },
+// }));
 
 const Lista = (props: any) => {
   const confirm = useConfirm();
-  const classes = useStyles();
+  //const classes = useStyles();
   const [data, setData] = useState<Sistema[]>();
   //const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const imEditar = 'Editar';
-  const imDeletar = 'Deletar';
+  const imEditar = 'Editar',
+    imDeletar = 'Deletar';
 
   // const rect = anchorEl?.getBoundingClientRect();
   // const style: React.CSSProperties = {
@@ -106,10 +107,10 @@ const Lista = (props: any) => {
   }
 
   const columns = [
-    { formatter: 'rownum', hozAlign: 'center', headerSort: false },
-    { formatter: reactFormatter(<SimpleButton />), hozAlign: 'center', headerSort: false },
+    { formatter: 'rownum', hozAlign: 'center', headerSort: false, width: 50 },
+    { formatter: reactFormatter(<SimpleButton />), hozAlign: 'center', headerSort: false, width: 50 },
     { title: 'id', field: 'id', width: 50 },
-    { title: 'Nome', field: 'nome', width: 300 },
+    { title: 'Nome', field: 'nome' },
     { title: 'Ativo', field: 'ativo', width: 50, hozAlign: 'center', formatter: 'tickCross', headerSort: false },
   ];
 
@@ -117,24 +118,46 @@ const Lista = (props: any) => {
     history: true,
     layoutColumnsOnNewData: true,
     virtualDom: false,
+    width: '400px',
+  };
+
+  const handleNovo = () => {
+    props.history.push('/sistema/0');
   };
 
   //-----------------------------------------------------------------------------------------------------------------------
 
   return (
-    <div className={classes.container}>
-      <Paper className={classes.paper}>
-        <h2>Lista de sistemas</h2>
-
+    <Box clone p={3} maxWidth="800px">
+      <Paper>
+        <Box clone mb={2} display="flex" justifyContent="space-between">
+          <header>
+            <Typography variant="h5" gutterBottom>
+              Lista de sistemas
+            </Typography>
+            <Button variant="contained" size="small" color="secondary" onClick={handleNovo}>
+              Novo
+            </Button>
+          </header>
+        </Box>
         <Divider />
-
-        <ReactTabulator data={data} options={options} columns={columns} tooltips={false} layout={'fitData'} />
+        <Box clone mt={2}>
+          <ReactTabulator data={data} columns={columns} tooltips={true} layout={'fitColumns'} options={options} />
+        </Box>
       </Paper>
-    </div>
+    </Box>
   );
 };
 
 export default Lista;
+
+//  <div className={classes.container}>
+// <Paper className={classes.paper}>
+//   <h2>Lista de sistemas</h2>
+//   <Divider />
+//   <ReactTabulator data={data} options={options} columns={columns} tooltips={false} layout={'fitData'} />
+// </Paper>
+// </div>
 
 // <div className={classes.container}>
 //     <Paper className={classes.paper}>

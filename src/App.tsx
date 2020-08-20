@@ -12,6 +12,9 @@ import Lista from './pages/sistemas/lista';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -20,8 +23,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   main: {
+    //display: 'flex',
     flexGrow: 1,
     padding: theme.spacing(8),
+    //justifyContent: 'center',
   },
 }));
 
@@ -35,7 +40,7 @@ function App() {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <TiThMenu />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h5" className={classes.title}>
             Zank Web
           </Typography>
           <Button color="inherit" component={Link} to="/lista">
@@ -46,10 +51,8 @@ function App() {
 
       <main className={classes.main}>
         <Switch>
-          <div className="container">
-            <Route path="/sistema/:id" exact component={Sistema}></Route>
-            <Route path="/lista" exact component={Lista}></Route>
-          </div>
+          <Route path="/sistema/:id" exact component={Sistema}></Route>
+          <Route path="/lista" exact component={Lista}></Route>
         </Switch>
       </main>
     </div>
