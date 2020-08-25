@@ -1,7 +1,8 @@
 import './App.css';
 
-import { AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, IconButton, List, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
+import Drawer from '@material-ui/core/Drawer';
 import React from 'react';
 import { TiThMenu } from 'react-icons/ti';
 import { Link, Route, Switch } from 'react-router-dom';
@@ -16,6 +17,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -23,19 +30,21 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   main: {
-    //display: 'flex',
+    display: 'flex',
     flexGrow: 1,
-    padding: theme.spacing(8),
+    padding: theme.spacing(1),
     //justifyContent: 'center',
+    height: '100vh',
+    width: '100%',
   },
 }));
 
 function App() {
   const classes = useStyles();
-
+  //, { [classes.appBarShift]: open })
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <TiThMenu />

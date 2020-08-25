@@ -1,16 +1,17 @@
 import 'react-tabulator/lib/css/tabulator.min.css';
 import 'react-tabulator/lib/styles.css';
 
-import { Button, Paper, Typography } from '@material-ui/core';
+import { Button, Dialog, Paper, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import { useConfirm } from 'material-ui-confirm';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { reactFormatter, ReactTabulator } from 'react-tabulator';
 import api from 'src/api';
 import CustomMenu from 'src/utils/custom-menu';
 
+import Cadastro from './cadastro';
+import helper, { ISistemasFormData } from './helper';
 import Sistema from './sistemas';
 
 interface Sistema {
@@ -52,23 +53,12 @@ interface Sistema {
 
 const Lista = (props: any) => {
   const confirm = useConfirm();
-  //const classes = useStyles();
   const [data, setData] = useState<Sistema[]>();
-  //const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [row, setDataRow] = useState<ISistemasFormData>(helper.defaultValues);
+  const [openCad, setOpenCad] = useState(false);
+
   const imEditar = 'Editar',
     imDeletar = 'Deletar';
-
-  // const rect = anchorEl?.getBoundingClientRect();
-  // const style: React.CSSProperties = {
-  //   top: rect ? `${rect.top + 10}px` : 'unset',
-  //   left: rect ? `${rect.left}px` : 'unset',
-  // };
-
-  // const deleteFunc = useCallback((event: React.BaseSyntheticEvent<HTMLDivElement>) => {
-  //   event.preventDefault();
-  //   console.log('target', event.target.closest('div'));
-  //   setAnchorEl(event.currentTarget);
-  // }, []);
 
   useEffect(() => {
     api()
@@ -96,7 +86,9 @@ const Lista = (props: any) => {
         row.delete();
       });
     } else if (caption === imEditar) {
-      props.history.push(`/sistema/${row.data.id}`);
+      //props.history.push(`/sistema/${row.data.id}`);
+      setDataRow(row.data); //as ISistemasFormData
+      setOpenCad(true);
     }
   };
 
@@ -110,7 +102,7 @@ const Lista = (props: any) => {
     { formatter: 'rownum', hozAlign: 'center', headerSort: false, width: 50 },
     { formatter: reactFormatter(<SimpleButton />), hozAlign: 'center', headerSort: false, width: 50 },
     { title: 'id', field: 'id', width: 50 },
-    { title: 'Nome', field: 'nome' },
+    { title: 'Nome', field: 'nome', width: 300 },
     { title: 'Ativo', field: 'ativo', width: 50, hozAlign: 'center', formatter: 'tickCross', headerSort: false },
   ];
 
@@ -122,59 +114,45 @@ const Lista = (props: any) => {
   };
 
   const handleNovo = () => {
-    props.history.push('/sistema/0');
+    //props.history.push('/sistema/0');
+    setOpenCad(true);
+  };
+
+  const handleRetorno = (row: ISistemasFormData) => {
+    setOpenCad(false);
+    console.log('retorno --------------', row);
+    //data.fin
   };
 
   //-----------------------------------------------------------------------------------------------------------------------
 
   return (
-    <Box clone p={3} maxWidth="800px">
-      <Paper>
-        <Box clone mb={2} display="flex" justifyContent="space-between">
-          <header>
-            <Typography variant="h5" gutterBottom>
-              Lista de sistemas
-            </Typography>
-            <Button variant="contained" size="small" color="secondary" onClick={handleNovo}>
-              Novo
-            </Button>
-          </header>
-        </Box>
-        <Divider />
-        <Box clone mt={2}>
-          <ReactTabulator data={data} columns={columns} tooltips={true} layout={'fitColumns'} options={options} />
-        </Box>
-      </Paper>
-    </Box>
+    <>
+      <Box clone p={3} maxWidth="800px">
+        <Paper>
+          <Box clone mb={2} display="flex" justifyContent="space-between">
+            <header>
+              <Typography variant="h5" gutterBottom>
+                Lista de sistemas
+              </Typography>
+              <Button variant="contained" size="small" color="secondary" onClick={handleNovo}>
+                Novo
+              </Button>
+            </header>
+          </Box>
+          <Divider />
+          <Box clone mt={2}>
+            <ReactTabulator data={data} columns={columns} tooltips={true} layout={'fitColumns'} options={options} />
+          </Box>
+        </Paper>
+      </Box>
+      <Dialog open={openCad} aria-labelledby="form-dialog-title">
+        <Cadastro open={openCad} retornar={handleRetorno} rowSistema={row} />
+      </Dialog>
+    </>
   );
 };
 
+//rowSistema={row}
+
 export default Lista;
-
-//  <div className={classes.container}>
-// <Paper className={classes.paper}>
-//   <h2>Lista de sistemas</h2>
-//   <Divider />
-//   <ReactTabulator data={data} options={options} columns={columns} tooltips={false} layout={'fitData'} />
-// </Paper>
-// </div>
-
-// <div className={classes.container}>
-//     <Paper className={classes.paper}>
-//         <h2>Lista de sistemas</h2>
-//         <Divider />
-//         {posts?.map(s =>
-//             <>
-//             <div key={s.id} className={classes.coluna}>
-//                 <div>{s.id}</div>
-//                 <div>{s.nome}</div>
-//                 <div>Ativo: {s.ativo ? 'sim' : 'não' }</div>
-//                 <IconButton>
-//                 <FaTrash color="#000000" />
-//                 </IconButton>
-//             </div>
-//             <Divider />
-//             </>
-//         )}
-//     </Paper>
-// </div>

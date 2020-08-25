@@ -4,15 +4,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { FiMoreVertical } from 'react-icons/fi';
-
-interface Sistema {
-  nome: string;
-  ativo: boolean;
-  id: number;
-}
+import { ISistemasFormData } from 'src/pages/sistemas/helper';
 
 export interface ItemsMenu {
-  row: Sistema;
+  row: ISistemasFormData;
   onClickItemMenu: (caption: string, row: any) => void;
   items: string[];
 }
