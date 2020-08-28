@@ -1,0 +1,2 @@
+executar este comando quando não tiver permissão para rodar script no powersheell
+"Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine"
