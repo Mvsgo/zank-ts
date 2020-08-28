@@ -1,7 +1,7 @@
 import 'react-tabulator/lib/css/tabulator.min.css';
 import 'react-tabulator/lib/styles.css';
 
-import { Button, Dialog, Paper, Typography } from '@material-ui/core';
+import { Button, Dialog, Paper, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import { useConfirm } from 'material-ui-confirm';
@@ -12,13 +12,6 @@ import CustomMenu from 'src/utils/custom-menu';
 
 import Cadastro from './cadastro';
 import helper, { ISistemasFormData } from './helper';
-import Sistema from './sistemas';
-
-interface Sistema {
-  nome: string;
-  ativo: boolean;
-  id: number;
-}
 
 // const useStyles = makeStyles((theme) => ({
 //   container: {
@@ -53,9 +46,11 @@ interface Sistema {
 
 const Lista = (props: any) => {
   const confirm = useConfirm();
-  const [data, setData] = useState<Sistema[]>();
+  const [data, setData] = useState<ISistemasFormData[]>([]);
   const [row, setDataRow] = useState<ISistemasFormData>(helper.defaultValues);
   const [openCad, setOpenCad] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const imEditar = 'Editar',
     imDeletar = 'Deletar';
@@ -113,15 +108,37 @@ const Lista = (props: any) => {
     width: '400px',
   };
 
+  const handleClose = () => {
+    setOpenCad(false);
+  };
+
   const handleNovo = () => {
     //props.history.push('/sistema/0');
+    setDataRow(helper.defaultValues);
     setOpenCad(true);
   };
 
-  const handleRetorno = (row: ISistemasFormData) => {
+  const handleRetorno = (row?: ISistemasFormData) => {
     setOpenCad(false);
-    console.log('retorno --------------', row);
-    //data.fin
+
+    if (!row) {
+      console.log('row.id -------------- row is null');
+      return;
+    }
+
+    console.log('row.id --------------', row.id);
+    const index = data.findIndex((e) => e.id === row.id);
+
+    if (index > -1) {
+      data[index] = row;
+      //ou esse aqui data.splice(index, 1, row);
+      //setData(data);
+      setDataRow(row);
+    } else {
+      console.log('index  --------------', index);
+      data.push(row);
+      setDataRow(row);
+    }
   };
 
   //-----------------------------------------------------------------------------------------------------------------------
@@ -146,7 +163,8 @@ const Lista = (props: any) => {
           </Box>
         </Paper>
       </Box>
-      <Dialog open={openCad} aria-labelledby="form-dialog-title">
+
+      <Dialog open={openCad} aria-labelledby="form-dialog-title" fullScreen={fullScreen} onClose={handleClose}>
         <Cadastro open={openCad} retornar={handleRetorno} rowSistema={row} />
       </Dialog>
     </>

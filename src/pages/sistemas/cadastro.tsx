@@ -10,10 +10,12 @@ import helper, { ISistemasFormData } from './helper';
 
 export interface param {
   open: boolean;
-  retornar: (row: ISistemasFormData) => void;
+  retornar: (row?: ISistemasFormData) => void;
   rowSistema: ISistemasFormData;
 }
+
 //React.Dispatch<React.SetStateAction<boolean>>;
+
 const Cadastro: React.FC<param> = (props) => {
   const { control, handleSubmit, reset, errors, formState } = useForm<ISistemasFormData>({
     defaultValues: helper.defaultValues,
@@ -23,7 +25,7 @@ const Cadastro: React.FC<param> = (props) => {
   useEffect(() => {
     reset(props.rowSistema);
     console.log(' useEffect = ', props.rowSistema);
-  }, [props.rowSistema.id]);
+  }, [props.rowSistema, reset]);
 
   const submitForm = handleSubmit(async (data, event) => {
     event?.preventDefault();
@@ -31,29 +33,32 @@ const Cadastro: React.FC<param> = (props) => {
 
     if (props.rowSistema.id > 0) {
       console.log('edit id = ', props.rowSistema.id);
-      api()
+      await api()
         .put(`/sistemas/${props.rowSistema.id}`, data)
         .then((result) => {
           //props.history.push('/lista');
           //props.history.goBack();
-
-          props.retornar(data);
+          data.id = props.rowSistema.id;
+          props.retornar(result?.data);
         });
     } else {
       console.log('novo id = ', props.rowSistema.id);
-      api()
+      await api()
         .post('/sistemas', data)
-        .then((result) => {});
+        .then((result) => {
+          props.retornar(result?.data);
+        });
     }
 
     //simulando uma demora na resposta do backend
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    //await new Promise((resolve) => setTimeout(resolve, 500));
 
     reset({ ...helper.defaultValues });
   });
 
   const handleCancelar = () => {
-    props.retornar(props.rowSistema);
+    props.retornar();
+    //props.retornar();
   };
 
   return (

@@ -16,7 +16,7 @@ import React from 'react';
 import { TiThMenu } from 'react-icons/ti';
 import { Link, Route, Switch } from 'react-router-dom';
 
-import Sistema from './pages/sistemas';
+import Cadastro from './pages/sistemas/cadastro';
 import Lista from './pages/sistemas/lista';
 
 const drawerWidth = 240;
@@ -170,7 +170,7 @@ export default function AppBarra() {
       >
         <div className={classes.drawerHeader} />
         <Switch>
-          <Route path="/sistema/:id" exact component={Sistema}></Route>
+          <Route path="/cadastro/:id" exact component={Cadastro}></Route>
           <Route path="/lista" exact component={Lista}></Route>
         </Switch>
       </main>
