@@ -7,6 +7,7 @@ import React from 'react';
 import { TiThMenu } from 'react-icons/ti';
 import { Link, Route, Switch } from 'react-router-dom';
 
+import Scrap from './pages/scrap';
 import Sistema from './pages/sistemas';
 import Lista from './pages/sistemas/lista';
 
@@ -52,8 +53,11 @@ function App() {
           <Typography variant="h5" className={classes.title}>
             Zank Web
           </Typography>
-          <Button color="inherit" component={Link} to="/lista">
+          {/* <Button color="inherit" component={Link} to="/lista">
             Login
+          </Button> */}
+          <Button color="inherit" component={Link} to="/scrap">
+            scrap
           </Button>
         </Toolbar>
       </AppBar>
@@ -62,6 +66,7 @@ function App() {
         <Switch>
           <Route path="/sistema/:id" exact component={Sistema}></Route>
           <Route path="/lista" exact component={Lista}></Route>
+          <Route path="/scrap" exact component={Scrap}></Route>
         </Switch>
       </main>
     </div>

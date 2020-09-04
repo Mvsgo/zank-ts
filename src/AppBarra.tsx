@@ -16,6 +16,7 @@ import React from 'react';
 import { TiThMenu } from 'react-icons/ti';
 import { Link, Route, Switch } from 'react-router-dom';
 
+import Scrap from './pages/scrap';
 import Cadastro from './pages/sistemas/cadastro';
 import Lista from './pages/sistemas/lista';
 
@@ -172,6 +173,7 @@ export default function AppBarra() {
         <Switch>
           <Route path="/cadastro/:id" exact component={Cadastro}></Route>
           <Route path="/lista" exact component={Lista}></Route>
+          <Route path="/scrap" exact component={Scrap}></Route>
         </Switch>
       </main>
     </div>
