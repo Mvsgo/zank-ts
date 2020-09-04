@@ -26,19 +26,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface ISistemasFormData {
-  id: number;
+  _id?: String;
   nome: string;
   ativo: boolean;
 }
 
 const schema = yup.object().shape<ISistemasFormData>({
-  id: yup.number().integer().default(0).required(),
+  _id: yup.string(), //.default('0').notRequired(),
   ativo: yup.boolean().required(),
   nome: yup.string().uppercase().trim().required('O nome do sistema deve ser informado').min(4, 'O nome do sistema deve ter 4 ou mais caracteres'),
 });
 
 const defaultValues: ISistemasFormData = {
-  id: 0,
+  _id: '0',
   nome: '',
   ativo: true,
 };

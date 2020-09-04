@@ -59,8 +59,8 @@ const Lista = (props: any) => {
     api()
       .get('/sistemas')
       .then((result) => {
-        setData(result.data);
         console.log(result.data);
+        setData(result.data.docs);
         //await new Promise(resolve => setTimeout(resolve,500));
       });
   }, []);
@@ -77,11 +77,11 @@ const Lista = (props: any) => {
         cancellationText: 'Cancelar',
         description: 'Confirmar excluir o sistema: ' + row.data.nome,
       }).then(async () => {
-        await api().delete(`/sistemas/${row.data.id}`);
+        await api().delete(`/sistemas/${row.data._id}`);
         row.delete();
       });
     } else if (caption === imEditar) {
-      //props.history.push(`/sistema/${row.data.id}`);
+      //props.history.push(`/sistema/${row.data._id}`);
       setDataRow(row.data); //as ISistemasFormData
       setOpenCad(true);
     }
@@ -96,7 +96,7 @@ const Lista = (props: any) => {
   const columns = [
     { formatter: 'rownum', hozAlign: 'center', headerSort: false, width: 50 },
     { formatter: reactFormatter(<SimpleButton />), hozAlign: 'center', headerSort: false, width: 50 },
-    { title: 'id', field: 'id', width: 50 },
+    { title: 'id', field: '_id', width: 50 },
     { title: 'Nome', field: 'nome', width: 300 },
     { title: 'Ativo', field: 'ativo', width: 50, hozAlign: 'center', formatter: 'tickCross', headerSort: false },
   ];
@@ -122,12 +122,12 @@ const Lista = (props: any) => {
     setOpenCad(false);
 
     if (!row) {
-      console.log('row.id -------------- row is null');
+      console.log('row._id -------------- row is null');
       return;
     }
 
-    console.log('row.id --------------', row.id);
-    const index = data.findIndex((e) => e.id === row.id);
+    console.log('row._id --------------', row._id);
+    const index = data.findIndex((e) => e._id === row._id);
 
     if (index > -1) {
       data[index] = row;

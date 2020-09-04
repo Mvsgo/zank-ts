@@ -31,18 +31,18 @@ const Cadastro: React.FC<param> = (props) => {
     event?.preventDefault();
     console.log('submitForm = ', data);
 
-    if (props.rowSistema.id > 0) {
-      console.log('edit id = ', props.rowSistema.id);
+    if (props.rowSistema._id !== '0') {
+      console.log('edit id = ', props.rowSistema._id);
       await api()
-        .put(`/sistemas/${props.rowSistema.id}`, data)
+        .put(`/sistemas/${props.rowSistema._id}`, data)
         .then((result) => {
           //props.history.push('/lista');
           //props.history.goBack();
-          data.id = props.rowSistema.id;
+          data._id = props.rowSistema._id;
           props.retornar(result?.data);
         });
     } else {
-      console.log('novo id = ', props.rowSistema.id);
+      console.log('novo id = ', props.rowSistema._id);
       await api()
         .post('/sistemas', data)
         .then((result) => {
