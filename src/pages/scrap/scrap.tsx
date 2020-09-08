@@ -1,6 +1,12 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import React, { useEffect, useState } from 'react';
+import api from 'src/api';
+
+import scrapSteam from './scraper';
+
+//import puppeteer from 'puppeteer';
+//const puppeteer = require('puppeteer');
 
 export interface ITabela {
   nome: string;
@@ -9,12 +15,25 @@ export interface ITabela {
 }
 
 const Scrap = () => {
-  const [tabela, setTabela] = useState<ITabela[]>([]);
-
-  const url = 'https://globoesporte.globo.com/rj/futebol/campeonato-carioca/';
+  //const [tabela, setTabela] = useState<ITabela[]>([]);
 
   useEffect(() => {
-    axios(url)
+    console.log('aqui inico');
+    Pega();
+  }, []);
+
+  const Pega = async () => {
+    //const result = await scrapSteam();
+    //console.log('sera = ', result);
+
+    //https://globoesporte.globo.com/rj/futebol/campeonato-carioca/
+    axios
+      .get('https://google.com.br', {
+        proxy: {
+          host: '192.168.0.73',
+          port: 2138,
+        },
+      })
       .then((response) => {
         console.log('aqui inico');
         const html = response.data;
@@ -22,6 +41,7 @@ const Scrap = () => {
         const tabelaStatus = $('.ranking-item-wrapper');
         let tabelaJogador: ITabela[];
 
+        console.log(html);
         console.log('aqui esta');
 
         tabelaStatus.each(function () {
@@ -34,14 +54,12 @@ const Scrap = () => {
 
           tabelaJogador.push({ nome: nomeJogador, posicao: posicaoJogador, numero: numeroGols });
           console.log(tabelaJogador);
-          
         });
       })
-      .catch(
-        console.log('aqui erro');
-        console.error;
-        ));
-  }, []);
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return <div>loading...</div>;
 };
