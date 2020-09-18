@@ -6,14 +6,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import AppBarra from './AppBarra';
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
     <CssBaseline />
     <BrowserRouter>
       <ConfirmProvider>
-        <AppBarra />
+        <App />
       </ConfirmProvider>
     </BrowserRouter>
   </React.StrictMode>,

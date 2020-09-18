@@ -1,4 +1,3 @@
-import { Button } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -14,12 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import React from 'react';
 import { TiThMenu } from 'react-icons/ti';
-import { Link, Route, Switch } from 'react-router-dom';
 
-import Scrap from './pages/scrap';
-import Cadastro from './pages/sistemas/cadastro';
-import Lista from './pages/sistemas/lista';
-
+//import { RiLogoutCircleLine } from 'react-icons/ri';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -27,25 +22,23 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
     },
-    title: {
-      flexGrow: 1,
-    },
     appBar: {
-      transition: theme.transitions.create(['margin', 'width'], {
+      zIndex: theme.zIndex.drawer + 1,
+      transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
     },
     appBarShift: {
-      width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
+      //width:`calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
       }),
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      marginRight: 36,
     },
     hide: {
       display: 'none',
@@ -53,46 +46,42 @@ const useStyles = makeStyles((theme: Theme) =>
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
+      whiteSpace: 'nowrap',
     },
-    drawerPaper: {
+    drawerOpen: {
       width: drawerWidth,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
-    drawerHeader: {
+    drawerClose: {
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: 'hidden',
+      width: theme.spacing(7) + 1,
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(9) + 1,
+      },
+    },
+    toolbar: {
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'flex-end',
       padding: theme.spacing(0, 1),
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
-      justifyContent: 'flex-end',
     },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      marginLeft: -drawerWidth,
-    },
-    contentShift: {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    },
-    main: {
-      display: 'flex',
-      flexGrow: 1,
-      padding: theme.spacing(1),
-      //justifyContent: 'center',
-      height: '100vh',
-      width: '100%',
     },
   })
 );
 
-export default function AppBarra() {
+const MainMenu = (props: any) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -120,62 +109,52 @@ export default function AppBarra() {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
+            })}
           >
-            <TiThMenu />
+            {' '}
+            1
           </IconButton>
-
-          <Typography variant="h5" className={classes.title}>
-            Zank Web
+          <Typography variant="h6" noWrap>
+            Mini variant drawer
           </Typography>
-          <Button color="inherit" component={Link} to="/lista">
-            Login
-          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
         classes={{
-          paper: classes.drawerPaper,
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
         }}
       >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>{theme.direction === 'ltr' ? <TiThMenu /> : <TiThMenu />}</IconButton>
+        <div className={classes.toolbar}>
+          {/* <IconButton onClick={handleDrawerClose}>{theme.direction === 'rtl' ? <TiThMenu /> : <TiThMenu />}</IconButton> */}
+          <IconButton onClick={handleDrawerClose}>{open ? <TiThMenu /> : <TiThMenu />}</IconButton>
         </div>
         <Divider />
         <List>
-          <ListItem button key={'Sistemas'} component={Link} to="/sistema/0">
-            <ListItemIcon>
-              <TiThMenu />
-            </ListItemIcon>
-            <ListItemText primary={'Sistemas'} />
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <TiThMenu /> : <TiThMenu />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
           ))}
         </List>
+        <Divider />
       </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        <Switch>
-          <Route path="/cadastro/:id" exact component={Cadastro}></Route>
-          <Route path="/lista" exact component={Lista}></Route>
-          <Route path="/scrap" exact component={Scrap}></Route>
-        </Switch>
+
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {props.Children}
       </main>
     </div>
   );
-}
+};
+export default MainMenu;
