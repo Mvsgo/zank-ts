@@ -16,8 +16,7 @@ const HomeRoutes = () => {
       <Route exact path="/home">
         <h2>Conteúdo padrão </h2>
       </Route>
-
-      <Route path="/home/sistemas/lista" component={Lista} />
+      <Route path="/home/lista" component={Lista} />
       <Route path="/home/produtos" component={Produtos} />
     </Switch>
   );

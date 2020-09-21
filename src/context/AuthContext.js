@@ -8,7 +8,9 @@ const AuthContext = createContext({
   loginWithGoogle: Function,
 });
 
-export const AuthProvider = ({ children }) => {
+//export const AuthProvider = ({ children }) => {
+export const AuthProvider = (props) => {
+  const { children } = props;
   const history = useHistory();
   const [userLogged, setUserLogged] = useState(false);
 
