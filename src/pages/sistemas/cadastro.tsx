@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
-import api from 'src/api';
+import useApi from 'src/api';
 
 import helper, { ISistemasFormData } from './helper';
 
@@ -21,6 +21,7 @@ const Cadastro: React.FC<param> = (props) => {
     defaultValues: helper.defaultValues,
     resolver: yupResolver(helper.schema),
   });
+  const { Api } = useApi();
 
   useEffect(() => {
     reset(props.rowSistema);
@@ -33,7 +34,7 @@ const Cadastro: React.FC<param> = (props) => {
 
     if (props.rowSistema._id !== '0') {
       console.log('edit id = ', props.rowSistema._id);
-      await api()
+      await Api()
         .put(`/sistemas/${props.rowSistema._id}`, data)
         .then((result) => {
           //props.history.push('/lista');
@@ -43,7 +44,7 @@ const Cadastro: React.FC<param> = (props) => {
         });
     } else {
       console.log('novo id = ', props.rowSistema._id);
-      await api()
+      await Api()
         .post('/sistemas', data)
         .then((result) => {
           props.retornar(result?.data);

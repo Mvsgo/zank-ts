@@ -47,8 +47,9 @@ const CustomMenu: React.FC<ItemsMenu> = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {items?.map((caption) => (
+        {items?.map((caption, idx) => (
           <MenuItem
+            key={idx}
             onClick={() => {
               handleClose();
               Boolean(onClickItemMenu(caption, row));

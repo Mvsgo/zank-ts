@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { FaCheck } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import { useParams } from 'react-router-dom';
-import api from 'src/api';
+import useApi from 'src/api';
 
 import helper, { ISistemasFormData } from './helper';
 
@@ -13,6 +13,7 @@ const Sistema = (props: any) => {
   const { id } = useParams();
   //const [idKey, setIdKey] = useState<number>(0);
   //const [data, setData] = useState<ISistemasFormData>();
+  const { Api } = useApi();
 
   //const classes = helper.useStyles();
 
@@ -25,7 +26,7 @@ const Sistema = (props: any) => {
 
   useEffect(() => {
     if (id > 0) {
-      api()
+      Api()
         .get(`/sistemas/${id}`)
         .then((result) => {
           console.log(result.data);
@@ -44,7 +45,7 @@ const Sistema = (props: any) => {
 
     if (id > 0) {
       console.log('edit id = ', id);
-      api()
+      Api()
         .put(`/sistemas/${id}`, data)
         .then((result) => {
           //props.history.push('/lista');
@@ -53,7 +54,7 @@ const Sistema = (props: any) => {
         });
     } else {
       console.log('novo id = ', id);
-      api()
+      Api()
         .post('/sistemas', data)
         .then((result) => {});
     }

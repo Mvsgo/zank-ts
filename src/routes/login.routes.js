@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const { login, loginWithGoogle } = useAuth();
+
   return (
     <div>
       <h1>Login Page</h1>

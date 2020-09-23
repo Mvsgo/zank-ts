@@ -7,65 +7,44 @@ import Divider from '@material-ui/core/Divider';
 import { useConfirm } from 'material-ui-confirm';
 import React, { useEffect, useState } from 'react';
 import { reactFormatter, ReactTabulator } from 'react-tabulator';
-import api from 'src/api';
+import useApi from 'src/api';
 import CustomMenu from 'src/utils/custom-menu';
 
 import Cadastro from './cadastro';
 import helper, { ISistemasFormData } from './helper';
 
-// const useStyles = makeStyles((theme) => ({
-//   container: {
-//     display: 'flex',
-//     height: '100%',
-//     width: '100%',
-//     justifyContent: 'flex-start',
-//     alignItems: 'center',
-//     flexDirection: 'column',
-//   },
-//   paper: {
-//     display: 'flex',
-//     maxWidth: 800,
-//     flexDirection: 'column',
-//     padding: '10px',
-//   },
-//   coluna: {
-//     display: 'flex',
-//     justifyContent: 'flex-start',
-//     alignItems: 'space-around',
-//     '& div': {
-//       margin: '5px',
-//       fontSize: '27px',
-//       fontWeight: 40,
-//     },
-//   },
-//   button: {
-//     flex: 1,
-//     margin: '16px 0',
-//   },
-// }));
-
-const Lista = (props: any) => {
+const Lista = () => {
   const confirm = useConfirm();
   const [data, setData] = useState<ISistemasFormData[]>([]);
   const [row, setDataRow] = useState<ISistemasFormData>(helper.defaultValues);
   const [openCad, setOpenCad] = useState(false);
+  const [erro, setErro] = useState('');
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const { Api } = useApi();
 
-  const imEditar = 'Editar',
-    imDeletar = 'Deletar';
+  const imEditar = 'Editar';
+  const imDeletar = 'Deletar';
 
   useEffect(() => {
-    api()
-      .get('/sistemas')
-      .then((result) => {
-        console.log(result.data);
-        setData(result.data.docs);
-        //await new Promise(resolve => setTimeout(resolve,500));
-      });
+    const buscaDados = async () => {
+      try {
+        const response = await Api().get('/sistemas');
+        console.log(response.data);
+        setData(response.data.docs);
+        setErro('');
+      } catch (error) {
+        setErro('Acesso negado buscando dados do sistema');
+        if (error.response.status === 401) {
+          console.log('-----------------------------Acesso negado buscando dados do sistema-----------------------------');
+        }
+        console.log(error);
+      }
+    };
+    buscaDados();
   }, []);
 
-  if (!data) return <div>loading...</div>;
+  if (erro) return <div>{erro}</div>;
 
   const handleItemMenu = (caption: string, row: any) => {
     //console.log('clicked item menu > ' + caption + ':' + row.data.nome);
@@ -77,7 +56,7 @@ const Lista = (props: any) => {
         cancellationText: 'Cancelar',
         description: 'Confirmar excluir o sistema: ' + row.data.nome,
       }).then(async () => {
-        await api().delete(`/sistemas/${row.data._id}`);
+        await Api().delete(`/sistemas/${row.data._id}`);
         row.delete();
       });
     } else if (caption === imEditar) {
