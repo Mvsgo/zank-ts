@@ -1,7 +1,6 @@
 import { Divider, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { Hidden } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -92,7 +91,15 @@ const Home = (props: any) => {
       </List>
 
       <Divider />
-
+      <List>
+        <ListItem button key={'Dashboard'} component={Link} to="/home/dashboard">
+          <ListItemIcon>
+            <TiThMenu />
+          </ListItemIcon>
+          <ListItemText primary={'Dashboard'} />
+        </ListItem>
+      </List>
+      <Divider />
       <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
@@ -108,7 +115,6 @@ const Home = (props: any) => {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} className={classes.menuButton}>

@@ -1,10 +1,16 @@
 import React from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext';
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const { login, loginWithGoogle } = useAuth();
+  console.log('em login');
+
+  const loginOpen = () => {
+    login();
+    props.history.push('/');
+  };
 
   return (
     <div>
@@ -19,32 +25,33 @@ const LoginPage = () => {
       </div>
 
       <div>
-        <button onClick={login}>Login</button>
+        <button onClick={loginOpen}>Login</button>
         <button onClick={loginWithGoogle}>Login Com Google</button>
       </div>
     </div>
   );
 };
 
-const Forgot = () => {
-  return <h1>Esqueci minha senha</h1>;
-};
+// const Forgot = () => {
+//   return <h1>Esqueci minha senha</h1>;
+// };
 
-const Signup = () => {
-  return <h1>Cadastre-se</h1>;
-};
+// const Signup = () => {
+//   return <h1>Cadastre-se</h1>;
+// };
 
-const LoginRoutes = () => {
-  return (
-    <Switch>
-      <Route exact path="/" component={LoginPage} />
-      <Route path="/forgot" component={Forgot} />
-      <Route path="/signup" component={Signup} />
-      <Route path="*">
-        <h3>rota não existe</h3>
-      </Route>
-    </Switch>
-  );
-};
+// const LoginRoutes = () => {
+//   return (
+//     <Switch>
+//       <Route exact path="/" component={LoginPage} />
+//       <Route path="/forgot" component={Forgot} />
+//       <Route path="/signup" component={Signup} />
+//       <Route path="*">
+//         <h3>rota não existe em login</h3>
+//       </Route>
+//     </Switch>
+//   );
+// };
+//      <Route path="/home" component={Home} />
 
-export default LoginRoutes;
+export default LoginPage;

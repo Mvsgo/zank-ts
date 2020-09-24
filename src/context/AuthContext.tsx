@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import useApi from 'src/api';
 
 interface IAuthContext {
   access_token: string;
@@ -14,22 +14,22 @@ const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 //export const AuthProvider = ({ children }) => {
 export const AuthProvider = (props: PropsWithChildren<{}>) => {
   const { children } = props;
-  const history = useHistory();
   const [userLogged, setUserLogged] = useState(false);
   const [token, setToken] = useState('');
+  const { Api } = useApi();
 
   const login = async () => {
-    // const response = await Api().post('/auth/login', { email: 'teste6@gmail.com', password: '1234' });
-    // if (response.data.access_token) {
-    //   console.log('access_token', response.data.access_token);
-    //   setUserLogged(true);
-    //   setToken(response.data.access_token);
-    // } else {
-    //   console.log('access_token', ' = vazio');
-    //   setToken('');
-    // }
-    setUserLogged(true);
-    setToken('');
+    const response = await Api().post('/auth/login', { email: 'teste6@gmail.com', password: '1234' });
+    if (response.data.access_token) {
+      console.log('access_token', response.data.access_token);
+      setUserLogged(true);
+      setToken(response.data.access_token);
+    } else {
+      console.log('access_token', ' = vazio');
+      setToken('');
+    }
+    //setUserLogged(true);
+    //setToken('');
   };
 
   const loginWithGoogle = () => {
@@ -37,7 +37,7 @@ export const AuthProvider = (props: PropsWithChildren<{}>) => {
   };
 
   const logout = () => {
-    history.push('/');
+    //props.history.push('/');
     setUserLogged(false);
     setToken('');
   };
