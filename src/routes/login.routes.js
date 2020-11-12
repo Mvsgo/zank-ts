@@ -1,15 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import useApi from 'src/api';
 
 import { useAuth } from '../context/AuthContext';
 
+//const LoginPage = (props) => {
 const LoginPage = (props) => {
+  const { Api } = useApi();
   const { login, loginWithGoogle } = useAuth();
   console.log('em login');
 
-  const loginOpen = () => {
-    login();
-    props.history.push('/');
+  const loginOpen = async () => {
+    //await login();
+    //props.history.push('/');
+
+    const response = await Api().post('/auth/login', { email: 'teste6@gmail.com', password: '1234' });
+    if (response.data.access_token) {
+      console.log('access_token', response.data.access_token);
+      login(response.data.access_token);
+      //setUserLogged(true);
+      //setToken(response.data.access_token);
+      props.history.push('/');
+    } else {
+      console.log('access_token', ' = vazio');
+      //setToken('');
+      login('');
+    }
   };
 
   return (

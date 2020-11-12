@@ -1,10 +1,11 @@
 import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
-import useApi from 'src/api';
+
+//import useApi from 'src/api';
 
 interface IAuthContext {
   access_token: string;
   usuariologado: boolean;
-  login: () => void;
+  login: (pToken: string) => void;
   logout: () => void;
   loginWithGoogle: () => void;
 }
@@ -16,20 +17,27 @@ export const AuthProvider = (props: PropsWithChildren<{}>) => {
   const { children } = props;
   const [userLogged, setUserLogged] = useState(false);
   const [token, setToken] = useState('');
-  const { Api } = useApi();
+  //const { Api } = useApi();
 
-  const login = async () => {
-    const response = await Api().post('/auth/login', { email: 'teste6@gmail.com', password: '1234' });
-    if (response.data.access_token) {
-      console.log('access_token', response.data.access_token);
+  const login = (pToken: string) => {
+    // const response = await Api().post('/auth/login', { email: 'teste6@gmail.com', password: '1234' });
+    // if (response.data.access_token) {
+    //   console.log('access_token', response.data.access_token);
+    //   setUserLogged(true);
+    //   setToken(response.data.access_token);
+    // } else {
+    //   console.log('access_token', ' = vazio');
+    //   setToken('');
+    // }
+
+    if (pToken) {
+      console.log('access_token', pToken);
       setUserLogged(true);
-      setToken(response.data.access_token);
+      setToken(pToken);
     } else {
       console.log('access_token', ' = vazio');
       setToken('');
     }
-    //setUserLogged(true);
-    //setToken('');
   };
 
   const loginWithGoogle = () => {

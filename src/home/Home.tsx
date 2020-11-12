@@ -7,17 +7,23 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
+import { RiLogoutCircleLine } from 'react-icons/ri';
 import { TiThMenu } from 'react-icons/ti';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import HomeRoutes from 'src/routes/home.routes';
 
-//import { RiLogoutCircleLine } from 'react-icons/ri';
+import { useAuth } from '../context/AuthContext';
+
+//import { BiLogOut } from 'react-icons/bi';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+    },
+    title: {
+      flexGrow: 1,
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -68,11 +74,28 @@ const Home = (props: any) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { logout } = useAuth();
+  const history = useHistory();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleLogout = () => {
+    logout();
+    console.log('nada?');
+    history.push('/');
+  };
+
+  const handleClickMenu = (goto: string) => {
+    history.push(goto);
+    console.log('Props.width === ');
+    //if (theme.unstable_strictMode direction != 'ltr') {
+    //  setMobileOpen(!mobileOpen);
+    //}
+  };
+
+  //<ListItem button key={'Sistemas'} component={Link} to="/home/lista" >
   const drawer = (
     <div>
       <div className={classes.toolbar}>
@@ -82,7 +105,7 @@ const Home = (props: any) => {
       </div>
       <Divider />
       <List>
-        <ListItem button key={'Sistemas'} component={Link} to="/home/lista">
+        <ListItem button key={'Sistemas'} onClick={() => handleClickMenu('/home/lista')}>
           <ListItemIcon>
             <TiThMenu />
           </ListItemIcon>
@@ -120,9 +143,12 @@ const Home = (props: any) => {
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} className={classes.menuButton}>
             <TiThMenu />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Responsive drawer
+          <Typography variant="h6" className={classes.title}>
+            News
           </Typography>
+          <IconButton color="inherit" edge="end" onClick={handleLogout}>
+            <RiLogoutCircleLine />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

@@ -19,6 +19,7 @@ const HomeRoutes = () => {
   console.log('em Home');
   const { usuariologado } = useAuth();
   const para = usuariologado ? '/home/dashboard' : '/home/login';
+  console.log('usuariologado = ', usuariologado);
   console.log('vai para = ', para);
   console.log('useLocation.name', useLocation().pathname);
   return (
